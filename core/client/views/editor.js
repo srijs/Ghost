@@ -35,7 +35,7 @@
             {'key': 'Ctrl+Alt+C', 'style': 'copyHTML'},
             {'key': 'Meta+Alt+C', 'style': 'copyHTML'}
         ],
-        imageMarkdownRegex = /^(?:\{<(.*?)>\})?!(?:\[([^\n\]]*)\])(?:\(([^\n\]]*)\))?$/gim,
+        imageMarkdownRegex = /^(?:\{<(.*?)>\})?!(?:\[(dt)\])(?:\(([^\n\]]*)\))?$/gim,
         markerRegex = /\{<([\w\W]*?)>\}/;
     /*jslint regexp: false, bitwise: false */
 
@@ -623,13 +623,13 @@
             /*jslint regexp: true, bitwise: true */
             var line = findLine($(e.currentTarget).attr('id')),
                 lineNumber = editor.getLineNumber(line),
-                match = line.text.match(/(\!\[[^\n]\])(\([^\n]*\)?)?/),
+                match = line.text.match(/(\!\[dt\])(\([^\n]*\)?)?/),
                 replacement = '(http://)';
             /*jslint regexp: false, bitwise: false */
 
-            /*if (match) {
+            if (match) {
                 // simple case, we have the parenthesis
-                editor.setSelection({line: lineNumber, ch: match.index + 1}, {line: lineNumber, ch: match.index + match[0].length - 1});
+                editor.setSelection({line: lineNumber, ch: match.index}, {line: lineNumber, ch: match.index + match[0].length});
             } else {
                 console.log('Shouldnt happen');
                 match = line.text.match(/\!\[[^\n]\]/);
@@ -645,7 +645,7 @@
                         {line: lineNumber, ch: match.index + replacement.length }
                     );
                 }
-            }*/
+            }
             editor.replaceSelection('<iframe src="' + result_src + '" width="640" height="480" border="none"></iframe>');
         }
 
