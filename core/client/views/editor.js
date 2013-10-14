@@ -438,8 +438,19 @@
         },
 
         initUploads: function () {
-            this.$('.js-drop-zone').upload({editor: true});
-            this.$('.js-drop-zone').on('uploadstart', $.proxy(this.disableEditor, this));
+            //this.$('.js-drop-zone').upload({editor: true});
+            var dt_app    = "246f6407-6977-4830-87a9-9799eda640bb",//$('#dt_app').val(),
+                dt_secret = "65fd673f-7c8a-4d47-997b-b04aae7b4094",//$('#dt_auth').val(),
+                dt_target = "sam+ghost@tape.io"//$('#dt_target').val();
+            this.$('.js-drop-zone').upload({
+                doctape: { 
+                    app:    dt_app,
+                    secret: dt_secret,
+                    target: dt_target
+                },
+                editor: true
+            });
+            this.$('.js-drop-zone').on('uploadstart',   $.proxy(this.disableEditor, this));
             this.$('.js-drop-zone').on('uploadfailure', $.proxy(this.enableEditor, this));
             this.$('.js-drop-zone').on('uploadsuccess', $.proxy(this.enableEditor, this));
             this.$('.js-drop-zone').on('uploadsuccess', this.uploadMgr.handleUpload);
@@ -608,19 +619,22 @@
         }
 
         function handleUpload(e, result_src) {
+            console.log(result_src);
             /*jslint regexp: true, bitwise: true */
             var line = findLine($(e.currentTarget).attr('id')),
                 lineNumber = editor.getLineNumber(line),
-                match = line.text.match(/\([^\n]*\)?/),
+                match = line.text.match(/(\!\[[^\n]\])(\([^\n]*\)?)?/),
                 replacement = '(http://)';
             /*jslint regexp: false, bitwise: false */
 
-            if (match) {
+            /*if (match) {
                 // simple case, we have the parenthesis
                 editor.setSelection({line: lineNumber, ch: match.index + 1}, {line: lineNumber, ch: match.index + match[0].length - 1});
             } else {
-                match = line.text.match(/\]/);
+                console.log('Shouldnt happen');
+                match = line.text.match(/\!\[[^\n]\]/);
                 if (match) {
+                    console.log('Huh, got match.');
                     editor.replaceRange(
                         replacement,
                         {line: lineNumber, ch: match.index + 1},
@@ -631,8 +645,8 @@
                         {line: lineNumber, ch: match.index + replacement.length }
                     );
                 }
-            }
-            editor.replaceSelection(result_src);
+            }*/
+            editor.replaceSelection('<iframe src="' + result_src + '" width="640" height="480" border="none"></iframe>');
         }
 
         function getEditorValue() {

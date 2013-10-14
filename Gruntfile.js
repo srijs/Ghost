@@ -368,6 +368,7 @@ var path           = require('path'),
                 dev: {
                     files: {
                         'core/built/scripts/vendor.js': [
+
                             'core/shared/vendor/jquery/jquery.js',
                             'core/shared/vendor/jquery/jquery-ui-1.10.3.custom.min.js',
                             'core/client/assets/lib/jquery-utils.js',
@@ -395,7 +396,8 @@ var path           = require('path'),
                             'core/client/assets/vendor/countable.js',
                             'core/client/assets/vendor/to-title-case.js',
                             'core/client/assets/vendor/packery.pkgd.min.js',
-                            'core/client/assets/vendor/fastclick.js'
+                            'core/client/assets/vendor/fastclick.js',
+                            'core/client/assets/vendor/hmac-sha1.js'
                         ],
 
                         'core/built/scripts/helpers.js': [
@@ -452,6 +454,7 @@ var path           = require('path'),
                             'core/client/assets/vendor/to-title-case.js',
                             'core/client/assets/vendor/packery.pkgd.min.js',
                             'core/client/assets/vendor/fastclick.js',
+                            'core/client/assets/vendor/hmac-sha1.js',
 
                             'core/client/init.js',
 

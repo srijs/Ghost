@@ -1,4 +1,4 @@
 <section class="js-drop-zone">
-    <img class="js-upload-target" src="{{options.src}}"{{#unless options.src}} style="display: none"{{/unless}} alt="logo">
-    <input data-url="upload" class="js-fileupload main" type="file" name="uploadimage">
+    <iframe class="js-upload-target" src="{{options.src}}"{{#unless options.src}} style="display: none"{{/unless}} alt="logo" width="640" height="480">
+    <input data-url="https://my.doctape.com/sandbox/upload" class="js-fileupload main" type="file" name="files[]">
 </section>

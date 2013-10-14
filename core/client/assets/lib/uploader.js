@@ -23,8 +23,16 @@
             complete: function (result) {
                 var self = this;
 
-                function showImage(width, height) {
-                    $dropzone.find('img.js-upload-target').attr({"width": width, "height": height}).css({"display": "block"});
+                var docid = result[0].id,
+                    dt_app = settings.doctape.app,
+                    dt_target = settings.doctape.target,
+                    dt_secret = settings.doctape.secret,
+                    dt_auth = CryptoJS.HmacSHA1(docid, dt_secret);
+
+                console.log(result);
+
+                function showFrame(width, height) {
+                    $dropzone.find('iframe.js-upload-target').attr({"width": width, "height": height}).css({"display": "block"});
                     $dropzone.find('.fileupload-loading').remove();
                     $dropzone.css({"height": "auto"});
                     $dropzone.delay(250).animate({opacity: 100}, 1000, function () {
@@ -32,29 +40,29 @@
                     });
                 }
 
-                function animateDropzone($img) {
+                function animateDropzone($frame) {
                     $dropzone.animate({opacity: 0}, 250, function () {
                         $dropzone.removeClass('image-uploader').addClass('pre-image-uploader');
                         $dropzone.css({minHeight: 0});
                         self.removeExtras();
-                        $dropzone.animate({height: $img.height()}, 250, function () {
-                            showImage($img.width(), $img.height());
+                        $dropzone.animate({height: $frame.height()}, 250, function () {
+                            showFrame($frame.width(), $frame.height());
                         });
                     });
                 }
 
                 function preLoadImage() {
-                    var $img = $dropzone.find('img.js-upload-target')
-                        .attr({'src': '', "width": 'auto', "height": 'auto'});
+                    var url = 'https://my.doctape.com/sandbox/widget/' + docid + '?app=' + dt_app + '&auth=' + dt_auth;
+                    var $frame = $dropzone.find('iframe.js-upload-target').attr({'src': url});
 
                     $progress.animate({"opacity": 0}, 250, function () {
                         $dropzone.find('span.media').after('<img class="fileupload-loading"  src="/ghost/img/loadingcat.gif" />');
                         if (!settings.editor) {$progress.find('.fileupload-loading').css({"top": "56px"}); }
                     });
-                    $dropzone.trigger("uploadsuccess", [result]);
-                    $img.one('load', function () {
-                        animateDropzone($img);
-                    }).attr('src', result);
+                    $dropzone.trigger("uploadsuccess", [url]);
+                    $frame.one('load', function () {
+                        animateDropzone($frame);
+                    }).attr('src', url);
                 }
                 preLoadImage();
             },
@@ -62,8 +70,21 @@
             bindFileUpload: function () {
                 var self = this;
 
+                var dt_app = settings.doctape.app,
+                    dt_target = settings.doctape.target,
+                    dt_secret = settings.doctape.secret,
+                    dt_auth = CryptoJS.HmacSHA1(dt_target, dt_secret);
+                    console.log("target: ");
+                    console.log(dt_target);
+
                 $dropzone.find('.js-fileupload').fileupload().fileupload("option", {
-                    url: '/ghost/upload/',
+                    url: 'https://my.doctape.com/sandbox/upload',
+                    dataType: 'json',
+                    formData: { 
+                        'dt_app':    dt_app,
+                        'dt_auth':   dt_auth,
+                        'dt_target': dt_target
+                    },
                     add: function (e, data) {
                         $dropzone.find('.js-fileupload').removeClass('right');
                         $dropzone.find('.js-url, button.centre').remove();
