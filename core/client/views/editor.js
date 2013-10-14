@@ -646,7 +646,7 @@
                     );
                 }
             }
-            editor.replaceSelection('<iframe src="' + result_src + '" width="640" height="480" border="none"></iframe>');
+            editor.replaceSelection('<iframe src="' + result_src + '" width="640" height="480" style="border:1px solid #ccc;"></iframe>');
         }
 
         function getEditorValue() {
